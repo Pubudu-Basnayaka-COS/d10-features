@@ -6,6 +6,7 @@
  */
 
 use Drupal\features\ConfigurationItem;
+use Drupal\features\FeaturesBundleInterface;
 use Drupal\features\FeaturesManagerInterface;
 use Drupal\features\Plugin\FeaturesGeneration\FeaturesGenerationWrite;
 use Drupal\Component\Diff\DiffFormatter;
@@ -204,7 +205,7 @@ function drush_features_status() {
 function drush_features_list_packages($package_name = '') {
   $assigner = _drush_features_options();
   $current_bundle = $assigner->getBundle();
-  $namespace = $current_bundle->isDefault() ? '' : $current_bundle->getMachineName();
+  $namespace = $current_bundle->isDefault() ? FeaturesBundleInterface::DEFAULT_BUNDLE : $current_bundle->getMachineName();
 
   /** @var \Drupal\features\FeaturesManagerInterface $manager */
   $manager = \Drupal::service('features.manager');
@@ -269,7 +270,7 @@ function drush_features_list_packages($package_name = '') {
 function drush_features_import_all() {
   $assigner = _drush_features_options();
   $current_bundle = $assigner->getBundle();
-  $namespace = $current_bundle->isDefault() ? '' : $current_bundle->getMachineName();
+  $namespace = $current_bundle->isDefault() ? FeaturesBundleInterface::DEFAULT_BUNDLE : $current_bundle->getMachineName();
 
   /** @var \Drupal\features\FeaturesManagerInterface $manager */
   $manager = \Drupal::service('features.manager');
