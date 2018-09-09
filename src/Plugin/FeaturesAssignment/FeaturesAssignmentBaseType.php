@@ -2,7 +2,7 @@
 
 namespace Drupal\features\Plugin\FeaturesAssignment;
 
-use Drupal\component\Utility\Unicode;
+use Drupal\Component\Utility\Unicode;
 use Drupal\features\FeaturesAssignmentMethodBase;
 
 /**
