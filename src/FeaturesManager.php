@@ -39,7 +39,7 @@ class FeaturesManager implements FeaturesManagerInterface {
   /**
    * The extension storages.
    *
-   * @var \Drupal\features\FeaturesExtensionStoragesInterface
+   * @var \Drupal\features\FeaturesExtensionStoragesByDirectoryInterface
    */
   protected $extensionStorages;
 
@@ -148,7 +148,7 @@ class FeaturesManager implements FeaturesManagerInterface {
     $this->configFactory = $config_factory;
     $this->configReverter = $config_reverter;
     $this->settings = $config_factory->getEditable('features.settings');
-    $this->extensionStorages = new FeaturesExtensionStorages($this->configStorage);
+    $this->extensionStorages = new FeaturesExtensionStoragesByDirectory($this->configStorage);
     $this->extensionStorages->addStorage(InstallStorage::CONFIG_INSTALL_DIRECTORY);
     $this->extensionStorages->addStorage(InstallStorage::CONFIG_OPTIONAL_DIRECTORY);
     $this->packages = [];
@@ -1150,6 +1150,7 @@ class FeaturesManager implements FeaturesManagerInterface {
       $dependency_manager = $this->getFeaturesConfigDependencyManager();
       // List configuration provided by installed features.
       $existing_config = $this->listExistingConfig(NULL);
+      $existing_config_by_directory = $this->extensionStorages->listAllByDirectory();
       foreach (array_keys($config_types) as $config_type) {
         $config = $this->listConfigByType($config_type);
         foreach ($config as $item_name => $label) {
@@ -1162,7 +1163,7 @@ class FeaturesManager implements FeaturesManagerInterface {
             'type' => $config_type,
             'dependents' => array_keys($dependency_manager->getDependentEntities('config', $name)),
             // Default to the install directory.
-            'subdirectory' => InstallStorage::CONFIG_INSTALL_DIRECTORY,
+            'subdirectory' => isset($existing_config_by_directory[$name]) ? $existing_config_by_directory[$name] : InstallStorage::CONFIG_INSTALL_DIRECTORY,
             'package' => '',
             'providerExcluded' => NULL,
             'provider' => isset($existing_config[$name]) ? $existing_config[$name] : NULL,
