@@ -473,7 +473,7 @@ class FeaturesExportForm extends FormBase {
     );
     $details['table'] = array(
       '#type' => 'details',
-      '#title' => array('#markup' => $this->t('Included configuration')),
+      '#title' => $this->t('Included configuration'),
       '#description' => array('data' => $element['table']),
     );
     $element['details'] = array(
