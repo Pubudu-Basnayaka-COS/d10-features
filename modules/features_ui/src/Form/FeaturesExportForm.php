@@ -370,7 +370,7 @@ class FeaturesExportForm extends FormBase {
     foreach ($package->getDependencies() as $dependency) {
       $package_config['dependencies'][] = [
         'name' => $dependency,
-        'label' => $this->moduleHandler->getName($dependency),
+        'label' => $this->moduleHandler->moduleExists($dependency) ? $this->moduleHandler->getName($dependency) : $dependency,
         'class' => '',
       ];
     }
