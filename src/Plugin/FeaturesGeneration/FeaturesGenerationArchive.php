@@ -2,6 +2,7 @@
 
 namespace Drupal\features\Plugin\FeaturesGeneration;
 
+use Drupal\Core\Access\CsrfTokenGenerator;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\features\FeaturesGenerationMethodBase;
 use Drupal\Core\Archiver\ArchiveTar;
@@ -44,7 +45,7 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
    * @param \Drupal\Core\Access\CsrfTokenGenerator $csrf_token
    *   The CSRF token generator.
    */
-  public function __construct($root, \Drupal\Core\Access\CsrfTokenGenerator $csrf_token) {
+  public function __construct($root, CsrfTokenGenerator $csrf_token) {
     $this->root = $root;
     $this->csrfToken = $csrf_token;
   }

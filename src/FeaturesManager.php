@@ -1,6 +1,7 @@
 <?php
 
 namespace Drupal\features;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\NestedArray;
@@ -1129,7 +1130,7 @@ class FeaturesManager implements FeaturesManagerInterface {
     // dependencies on the config entity classes. Assume data with UUID is a
     // config entity. Only configuration entities can be depended on so we can
     // ignore everything else.
-    $data = array_map(function(Drupal\Core\Config\ImmutableConfig $config) {
+    $data = array_map(function(ImmutableConfig $config) {
       $data = $config->get();
       if (isset($data['uuid'])) {
         return $data;

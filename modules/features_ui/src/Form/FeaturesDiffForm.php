@@ -103,7 +103,7 @@ class FeaturesDiffForm extends FormBase {
 
     $machine_name = '';
     if (!empty($featurename) && empty($packages[$featurename])) {
-      drupal_set_message($this->t('Feature @name does not exist.', ['@name' => $featurename]), 'error');
+      $this->messenger()->addError($this->t('Feature @name does not exist.', ['@name' => $featurename]));
       return [];
     }
     elseif (!empty($featurename)) {
@@ -178,7 +178,7 @@ class FeaturesDiffForm extends FormBase {
     $config = $this->featuresManager->getConfigCollection();
     $items = array_filter($form_state->getValue('diff'));
     if (empty($items)) {
-      drupal_set_message($this->t('No configuration was selected for import.'), 'warning');
+      $this->messenger()->addWarning($this->t('No configuration was selected for import.'));
       return;
     }
     foreach ($items as $config_name) {
@@ -192,7 +192,7 @@ class FeaturesDiffForm extends FormBase {
         $type = ConfigurationItem::fromConfigStringToConfigType($item['type']);
         $this->configRevert->import($type, $item['name_short']);
       }
-      drupal_set_message($this->t('Imported @name', ['@name' => $config_name]));
+      $this->messenger()->addStatus($this->t('Imported @name', ['@name' => $config_name]));
     }
   }
 

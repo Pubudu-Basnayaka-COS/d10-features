@@ -148,7 +148,7 @@ class FeaturesExportForm extends FormBase {
 
     // If there are no custom bundles, provide message.
     if (count($bundle_options) < 2) {
-      drupal_set_message($this->t('You have not yet created any bundles. Before generating features, you may wish to <a href=":create">create a bundle</a> to group your features within.', [':create' => Url::fromRoute('features.assignment')->toString()]));
+      $this->messenger()->addStatus($this->t('You have not yet created any bundles. Before generating features, you may wish to <a href=":create">create a bundle</a> to group your features within.', [':create' => Url::fromRoute('features.assignment')->toString()]));
     }
 
     $form['#prefix'] = '<div id="edit-features-wrapper">';
@@ -290,7 +290,7 @@ class FeaturesExportForm extends FormBase {
     $url = Url::fromRoute('features.edit', ['featurename' => $package->getMachineName()]);
 
     $element['name'] = [
-      'data' => \Drupal::l($package->getName(), $url),
+      'data' => \Drupal::service('link_generator')->generate($package->getName(), $url),
       'class' => ['feature-name'],
     ];
     $machine_name = $package->getMachineName();
@@ -541,7 +541,7 @@ class FeaturesExportForm extends FormBase {
     $package_names = array_filter($form_state->getValue('preview'));
 
     if (empty($package_names)) {
-      drupal_set_message($this->t('Please select one or more packages to export.'), 'warning');
+      $this->messenger()->addWarning($this->t('Please select one or more packages to export.'));
       return;
     }
 

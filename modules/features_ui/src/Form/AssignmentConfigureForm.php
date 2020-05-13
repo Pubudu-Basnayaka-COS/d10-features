@@ -329,7 +329,7 @@ class AssignmentConfigureForm extends FormBase {
 
       $form['weight'][$method_id] = [
         '#type' => 'weight',
-        '#title' => $this->t('Weight for @title package assignment method', ['@title' => Unicode::strtolower($method_name)]),
+        '#title' => $this->t('Weight for @title package assignment method', ['@title' => mb_strtolower($method_name)]),
         '#title_display' => 'invisible',
         '#default_value' => $weight,
         '#attributes' => ['class' => ['assignment-method-weight']],
@@ -340,7 +340,7 @@ class AssignmentConfigureForm extends FormBase {
 
       $form['enabled'][$method_id] = [
         '#type' => 'checkbox',
-        '#title' => $this->t('Enable @title package assignment method', ['@title' => Unicode::strtolower($method_name)]),
+        '#title' => $this->t('Enable @title package assignment method', ['@title' => mb_strtolower($method_name)]),
         '#title_display' => 'invisible',
         '#default_value' => $enabled,
       ];
@@ -427,7 +427,7 @@ class AssignmentConfigureForm extends FormBase {
     $this->assigner->setCurrent($bundle);
 
     $form_state->setRedirect('features.assignment');
-    drupal_set_message($this->t('Package assignment configuration saved.'));
+    $this->messenger()->addStatus($this->t('Package assignment configuration saved.'));
   }
 
   /**

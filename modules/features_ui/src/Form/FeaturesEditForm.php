@@ -969,10 +969,10 @@ class FeaturesEditForm extends FormBase {
         $type = ConfigurationItem::fromConfigStringToConfigType($item['type']);
         try {
           $this->configRevert->import($type, $item['name_short']);
-          drupal_set_message($this->t('Imported @name', ['@name' => $config_name]));
+          $this->messenger()->addStatus($this->t('Imported @name', ['@name' => $config_name]));
         } catch (\Exception $e) {
-          drupal_set_message($this->t('Error importing @name : @message',
-            ['@name' => $config_name, '@message' => $e->getMessage()]), 'error');
+          $this->messenger()->addError($this->t('Error importing @name : @message',
+            ['@name' => $config_name, '@message' => $e->getMessage()]));
         }
       }
     }
