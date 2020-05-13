@@ -3,12 +3,13 @@
 namespace Drupal\Tests\features\Unit;
 
 use Drupal\features\Package;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Drupal\features\Package
  * @group features
  */
-class PackageTest extends \PHPUnit_Framework_TestCase {
+class PackageTest extends TestCase {
 
   /**
    * @covers ::setFeaturesInfo
