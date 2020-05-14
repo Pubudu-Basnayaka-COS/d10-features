@@ -646,14 +646,6 @@ class FeaturesManagerTest extends UnitTestCase {
   public function testInitPackageFromNonInstalledExtension() {
     $extension = new Extension($this->root, 'module', 'modules/test_module/test_module.info.yml');
 
-    $info_parser = $this->prophesize(InfoParserInterface::class);
-    $info_parser->parse($this->root . '/modules/test_module/test_module.info.yml')->willReturn([
-      'name' => 'Test module',
-      'description' => 'test description',
-      'type' => 'module',
-    ]);
-    \Drupal::getContainer()->set('info_parser', $info_parser->reveal());
-
     $bundle = $this->prophesize(FeaturesBundle::class);
     $bundle->getFullName('test_module')->willReturn('test_module');
     $bundle->isDefault()->willReturn(TRUE);
@@ -682,14 +674,6 @@ class FeaturesManagerTest extends UnitTestCase {
    */
   public function testInitPackageFromInstalledExtension() {
     $extension = new Extension($this->root, 'module', 'modules/test_module/test_module.info.yml');
-
-    $info_parser = $this->prophesize(InfoParserInterface::class);
-    $info_parser->parse($this->root . '/modules/test_module/test_module.info.yml')->willReturn([
-      'name' => 'Test module',
-      'description' => 'test description',
-      'type' => 'module',
-    ]);
-    \Drupal::getContainer()->set('info_parser', $info_parser->reveal());
 
     $bundle = $this->prophesize(FeaturesBundle::class);
     $bundle->getFullName('test_module')->willReturn('test_module');
@@ -829,9 +813,6 @@ EOT
       ->method('exists')
       ->with('test_feature')
       ->willReturn(TRUE);
-
-    $info_parser = new InfoParser();
-    \Drupal::getContainer()->set('info_parser', $info_parser);
 
     $package = $features_manager->initPackage('test_feature', 'test name', 'test description', 'module', $bundle);
 

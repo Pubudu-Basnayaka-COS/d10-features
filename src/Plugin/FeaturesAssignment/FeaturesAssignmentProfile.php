@@ -3,6 +3,7 @@
 namespace Drupal\features\Plugin\FeaturesAssignment;
 
 use Drupal\features\FeaturesAssignmentMethodBase;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Config\InstallStorage;
 
 /**
@@ -142,7 +143,7 @@ class FeaturesAssignmentProfile extends FeaturesAssignmentMethodBase {
         if ($settings['standard']['dependencies']) {
           $info_file_uri = $standard_directory . '/standard.info.yml';
           if (file_exists($info_file_uri)) {
-            $profile_info = \Drupal::service('info_parser')->parse($info_file_uri);
+            $profile_info = Yaml::decode(file_get_contents($info_file_uri));
             $info = [
               'dependencies' => $profile_package->getDependencies(),
               'themes' => $profile_package->getThemes(),

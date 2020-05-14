@@ -70,9 +70,7 @@ class FeaturesCreateUITest extends WebTestBase {
     file_put_contents($info_filename, $archive->extractInString($feature_name . '/' . $feature_name . '.info.yml'));
     $features_info_filename = tempnam($this->tempFilesDirectory, 'feature');
     file_put_contents($features_info_filename, $archive->extractInString($feature_name . '/' . $feature_name . '.features.yml'));
-    /** @var \Drupal\Core\Extension\InfoParser $info_parser */
-    $info_parser = \Drupal::service('info_parser');
-    $parsed_info = $info_parser->parse($info_filename);
+    $parsed_info = Yaml::decode(file_get_contents($info_filename));
     $this->assertEqual('Test feature', $parsed_info['name']);
     $parsed_features_info = Yaml::decode(file_get_contents($features_info_filename));
     $this->assertEqual([
@@ -103,7 +101,7 @@ class FeaturesCreateUITest extends WebTestBase {
     $this->drupalPostForm(NULL, $edit, $this->t('Write'));
     $info_filename = $module_path . '/' . $feature_name . '.info.yml';
 
-    $parsed_info = $info_parser->parse($info_filename);
+    $parsed_info = Yaml::decode(file_get_contents($info_filename));
     $this->assertEqual('Test feature', $parsed_info['name']);
 
     $features_info_filename = $module_path . '/' . $feature_name . '.features.yml';

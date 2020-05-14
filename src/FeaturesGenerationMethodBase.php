@@ -57,8 +57,10 @@ abstract class FeaturesGenerationMethodBase implements FeaturesGenerationMethodI
    */
   protected function mergeInfoFile($package_info, $info_file_uri) {
     $package_info = Yaml::decode($package_info);
-    /** @var \Drupal\Core\Extension\InfoParserInterface $existing_info */
-    $existing_info = \Drupal::service('info_parser')->parse($info_file_uri);
+    // \Drupal\Core\Extension\InfoParser::parse() makes changes we don't want
+    // here such as adding a core_incompatible key. Instead parse the file
+    // directly.
+    $existing_info = Yaml::decode(file_get_contents($info_file_uri));
     return Yaml::encode($this->featuresManager->mergeInfoArray($existing_info, $package_info));
   }
 

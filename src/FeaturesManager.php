@@ -390,7 +390,7 @@ class FeaturesManager implements FeaturesManagerInterface {
    * {@inheritdoc}
    */
   public function getExtensionInfo(Extension $extension) {
-    return \Drupal::service('info_parser')->parse($this->root . '/' . $extension->getPathname());
+    return Yaml::decode(file_get_contents($this->root . '/' . $extension->getPathname()));
   }
 
   /**
