@@ -89,21 +89,21 @@ class FeaturesManagerTest extends UnitTestCase {
     $container->setParameter('install_profile', '');
     \Drupal::setContainer($container);
 
-    $entity_type = $this->getMock('\Drupal\Core\Config\Entity\ConfigEntityTypeInterface');
+    $entity_type = $this->createMock('\Drupal\Core\Config\Entity\ConfigEntityTypeInterface');
     $entity_type->expects($this->any())
       ->method('getConfigPrefix')
       ->willReturn('custom');
     $entity_type->expects($this->any())
       ->method('getProvider')
       ->willReturn('my_module');
-    $this->entityTypeManager = $this->getMock('\Drupal\Core\Entity\EntityTypeManagerInterface');
+    $this->entityTypeManager = $this->createMock('\Drupal\Core\Entity\EntityTypeManagerInterface');
     $this->entityTypeManager->expects($this->any())
       ->method('getDefinition')
       ->willReturn($entity_type);
-    $this->configFactory = $this->getMock(ConfigFactoryInterface::class);
-    $this->configStorage = $this->getMock(StorageInterface::class);
-    $this->configManager = $this->getMock(ConfigManagerInterface::class);
-    $this->moduleHandler = $this->getMock(ModuleHandlerInterface::class);
+    $this->configFactory = $this->createMock(ConfigFactoryInterface::class);
+    $this->configStorage = $this->createMock(StorageInterface::class);
+    $this->configManager = $this->createMock(ConfigManagerInterface::class);
+    $this->moduleHandler = $this->createMock(ModuleHandlerInterface::class);
     // getModuleList should return an array of extension objects.
     // but we just need  isset($module_list[$provider]) for
     // ::getConfigDependency() and ::assignInterPackageDependencies().
@@ -122,7 +122,7 @@ class FeaturesManagerTest extends UnitTestCase {
         'giraffe_package2' => true,
         'giraffe_package3' => true,
       ]);
-    $this->configReverter = $this->getMock(ConfigRevertInterface::class);
+    $this->configReverter = $this->createMock(ConfigRevertInterface::class);
     $this->configReverter->expects($this->any())
       ->method('import')
       ->willReturn(true);

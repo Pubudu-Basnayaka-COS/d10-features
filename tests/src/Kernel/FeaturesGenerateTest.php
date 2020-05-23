@@ -31,6 +31,11 @@ class FeaturesGenerateTest extends KernelTestBase {
    */
   protected $generator;
 
+  /**
+   * @var \Drupal\Core\File\FileSystem
+   */
+  protected $fileSystem;
+
   protected $strictConfigSchema = FALSE;
 
   /**
@@ -50,6 +55,7 @@ class FeaturesGenerateTest extends KernelTestBase {
     $this->featuresManager = \Drupal::service('features.manager');
     $this->generator = \Drupal::service('features_generator');
     $this->assigner = \Drupal::service('features_assigner');
+    $this->fileSystem = \Drupal::service('file_system');
 
     $this->featuresManager->initPackage(self::PACKAGE_NAME, 'My test package');
     $package = $this->featuresManager->getPackage(self::PACKAGE_NAME);
@@ -61,7 +67,7 @@ class FeaturesGenerateTest extends KernelTestBase {
    * @covers \Drupal\features\Plugin\FeaturesGeneration\FeaturesGenerationArchive
    */
   public function testExportArchive() {
-    $filename = file_directory_temp() . '/' . self::PACKAGE_NAME . '.tar.gz';
+    $filename = $this->fileSystem->getTempDirectory() . '/' . self::PACKAGE_NAME . '.tar.gz';
     if (file_exists($filename)) {
       unlink($filename);
     }
@@ -88,7 +94,7 @@ class FeaturesGenerateTest extends KernelTestBase {
   }
 
   public function testGeneratorWithBundle() {
-    $filename = file_directory_temp() . '/' . self::BUNDLE_NAME . '_' . self::PACKAGE_NAME . '.tar.gz';
+    $filename = $this->fileSystem->getTempDirectory() . '/' . self::BUNDLE_NAME . '_' . self::PACKAGE_NAME . '.tar.gz';
     if (file_exists($filename)) {
       unlink($filename);
     }
@@ -179,7 +185,7 @@ class FeaturesGenerateTest extends KernelTestBase {
     $this->assertEquals($file_contents, file_get_contents($css_file), 'Extra file contents not retained');
 
     // Next, test that generating an Archive picks up the extra files.
-    $filename = file_directory_temp() . '/' . self::PACKAGE_NAME . '.tar.gz';
+    $filename = $this->fileSystem->getTempDirectory() . '/' . self::PACKAGE_NAME . '.tar.gz';
     if (file_exists($filename)) {
       unlink($filename);
     }
