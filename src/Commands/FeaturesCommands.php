@@ -618,12 +618,13 @@ class FeaturesCommands extends DrushCommands {
     $formatter->trailing_context_lines = $lines;
     $formatter->show_header = FALSE;
 
-    if (drush_get_context('DRUSH_NOCOLOR')) {
-      $red = $green = "%s";
-    }
-    else {
+    if ($this->output()->isDecorated()) {
       $red = "\033[31;40m\033[1m%s\033[0m";
       $green = "\033[0;32;40m\033[1m%s\033[0m";
+    }
+    else {
+      $red = '%s';
+      $green = "%s";
     }
 
     $overrides = $manager->detectOverrides($feature);
@@ -720,7 +721,7 @@ class FeaturesCommands extends DrushCommands {
 
     // Determine if -y was supplied. If so, we can filter out needless output
     // from this command.
-    $skip_confirmation = drush_get_context('DRUSH_AFFIRMATIVE');
+    $skip_confirmation = $options['yes'];
     $manager = $this->manager;
 
     // Parse list of arguments.
