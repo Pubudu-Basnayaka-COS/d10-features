@@ -131,14 +131,14 @@ class AssignmentConfigureForm extends FormBase {
       }
       $load_values = TRUE;
     }
-    elseif ($trigger['#name'] == 'bundle[bundle_select]') {
+    elseif (isset($trigger['#name']) && $trigger['#name'] == 'bundle[bundle_select]') {
       $bundle_name = $form_state->getValue(['bundle', 'bundle_select']);
       if ($bundle_name != self::NEW_BUNDLE_SELECT_VALUE) {
         $this->assigner->setCurrent($this->assigner->getBundle($bundle_name));
       }
       $load_values = TRUE;
     }
-    elseif ($trigger['#name'] == 'removebundle') {
+    elseif (isset($trigger['#name']) && $trigger['#name'] == 'removebundle') {
       $current_bundle = $this->assigner->loadBundle($bundle_name);
       $bundle_name = $current_bundle->getMachineName();
       $this->assigner->removeBundle($bundle_name);

@@ -148,11 +148,11 @@ class FeaturesEditForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state, $featurename = '') {
     $session = $this->getRequest()->getSession();
     $trigger = $form_state->getTriggeringElement();
-    if ($trigger['#name'] == 'package') {
+    if (isset($trigger['#name']) && $trigger['#name'] == 'package') {
       // Save current bundle name for later ajax callback.
       $this->oldBundle = $this->bundle;
     }
-    elseif ($trigger['#name'] == 'conflicts') {
+    elseif (isset($trigger['#name']) && $trigger['#name'] == 'conflicts') {
       if (isset($session)) {
         $session->set('features_allow_conflicts', $form_state->getValue('conflicts'));
       }

@@ -117,7 +117,7 @@ class FeaturesExportForm extends FormBase {
       $bundle_name = $input['bundle'];
       $this->assigner->setCurrent($this->assigner->getBundle($bundle_name));
     }
-    elseif ($trigger['#name'] == 'bundle') {
+    elseif (isset($trigger['#name']) && $trigger['#name'] == 'bundle') {
       $bundle_name = $form_state->getValue('bundle', '');
       $this->assigner->setCurrent($this->assigner->getBundle($bundle_name));
     }
