@@ -840,7 +840,7 @@ EOT
     $features_manager->setAllModules(['test_feature' => $extension]);
 
     $this->moduleHandler->expects($this->any())
-      ->method('exists')
+      ->method('moduleExists')
       ->with('test_feature')
       ->willReturn(TRUE);
 
