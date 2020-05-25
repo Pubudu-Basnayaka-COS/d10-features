@@ -58,12 +58,14 @@ class FeaturesBundleIntegrationTest extends KernelTestBase {
    * @covers ::getFullName
    */
   public function testGetFullName() {
+    $this->markTestSkipped('Not yet implemented');
   }
 
   /**
    * @covers ::getShortName
    */
   public function testGetShortName() {
+    $this->markTestSkipped('Not yet implemented');
   }
 
   /**
