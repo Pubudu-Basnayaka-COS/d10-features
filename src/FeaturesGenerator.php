@@ -44,9 +44,11 @@ class FeaturesGenerator implements FeaturesGeneratorInterface {
    * Constructs a new FeaturesGenerator object.
    *
    * @param \Drupal\features\FeaturesManagerInterface $features_manager
-   *    The features manager.
+   *   The features manager.
    * @param \Drupal\Component\Plugin\PluginManagerInterface $generator_manager
    *   The package generation methods plugin manager.
+   * @param \Drupal\features\FeaturesAssignerInterface $assigner
+   *   The feature assigner interface.
    */
   public function __construct(FeaturesManagerInterface $features_manager, PluginManagerInterface $generator_manager, FeaturesAssignerInterface $assigner) {
     $this->featuresManager = $features_manager;

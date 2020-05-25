@@ -26,6 +26,7 @@ use Drupal\Core\Config\InstallStorage;
  * )
  */
 class FeaturesAssignmentProfile extends FeaturesAssignmentMethodBase {
+
   /**
    * {@inheritdoc}
    */
@@ -88,7 +89,8 @@ class FeaturesAssignmentProfile extends FeaturesAssignmentMethodBase {
               // @todo: if it's provided by a module, add a dependency.
               if (!$config_collection[$item_name]->getPackage()) {
                 $this->featuresManager->assignConfigPackage($profile_name, [$item_name], $force);
-                // Reload the profile to refresh the config array after the addition.
+                // Reload the profile to refresh the config array after the
+                // addition.
                 $profile_package = $this->featuresManager->getPackage($profile_name);
               }
               // If it's already assigned to a package in the current bundle,
@@ -106,7 +108,7 @@ class FeaturesAssignmentProfile extends FeaturesAssignmentMethodBase {
               $profile_package->appendFile([
                 'filename' => $filename,
                 'subdirectory' => $subdirectory,
-                'string' => file_get_contents($standard_directory . '/' . $subdirectory . '/' . $filename)
+                'string' => file_get_contents($standard_directory . '/' . $subdirectory . '/' . $filename),
               ]);
             }
           }
@@ -133,7 +135,7 @@ class FeaturesAssignmentProfile extends FeaturesAssignmentMethodBase {
               $profile_package->appendFile([
                 'filename' => $profile_name . '.' . $extension,
                 'subdirectory' => NULL,
-                'string' => $string
+                'string' => $string,
               ], $extension);
             }
           }
@@ -171,7 +173,7 @@ class FeaturesAssignmentProfile extends FeaturesAssignmentMethodBase {
   protected function listRequiredStandardConfig() {
     return [
       'contact.form.feedback',
-      'user.role.administrator'
+      'user.role.administrator',
     ];
   }
 

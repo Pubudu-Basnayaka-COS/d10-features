@@ -106,7 +106,7 @@ abstract class FeaturesGenerationMethodBase implements FeaturesGenerationMethodI
    *   An array of existing packages with machine names as keys and paths as
    *   values.
    * @param \Drupal\features\FeaturesBundleInterface $bundle
-   *   Optional bundle used for export
+   *   Optional bundle used for export.
    */
   abstract protected function preparePackage(Package $package, array $existing_packages, FeaturesBundleInterface $bundle = NULL);
 

@@ -59,10 +59,16 @@ class FeaturesDiffForm extends FormBase {
    *
    * @param \Drupal\features\FeaturesManagerInterface $features_manager
    *   The features manager.
+   * @param \Drupal\features\FeaturesAssignerInterface $assigner
+   *   The features assigner.
+   * @param \Drupal\config_update\ConfigDiffInterface $config_diff
+   *   The config diff.
+   * @param \Drupal\Core\Diff\DiffFormatter $diff_formatter
+   *   The diff formatter.
+   * @param \Drupal\config_update\ConfigRevertInterface $config_revert
+   *   The config revert.
    */
-  public function __construct(FeaturesManagerInterface $features_manager, FeaturesAssignerInterface $assigner,
-                              ConfigDiffInterface $config_diff, DiffFormatter $diff_formatter,
-                              ConfigRevertInterface $config_revert) {
+  public function __construct(FeaturesManagerInterface $features_manager, FeaturesAssignerInterface $assigner, ConfigDiffInterface $config_diff, DiffFormatter $diff_formatter, ConfigRevertInterface $config_revert) {
     $this->featuresManager = $features_manager;
     $this->assigner = $assigner;
     $this->configDiff = $config_diff;
@@ -209,7 +215,7 @@ class FeaturesDiffForm extends FormBase {
    * @return array
    *   A form element.
    */
-  protected function diffOutput(Package $package, $overrides, $missing = []) {
+  protected function diffOutput(Package $package, array $overrides, array $missing = []) {
     $element = [];
     $config = $this->featuresManager->getConfigCollection();
     $components = array_merge($missing, $overrides);

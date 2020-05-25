@@ -131,7 +131,7 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
           $package->appendFile([
             'filename' => $file->filename,
             'subdirectory' => $subdirectory,
-            'string' => file_get_contents($file->uri)
+            'string' => file_get_contents($file->uri),
           ]);
         }
       }
@@ -195,7 +195,7 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
    *   The return value, passed by reference.
    * @param \Drupal\features\Package $package
    *   The package or profile.
-   * @param ArchiveTar $archiver
+   * @param \Drupal\Core\Archiver\ArchiveTar $archiver
    *   The archiver.
    */
   protected function generatePackage(array &$return, Package $package, ArchiveTar $archiver) {
@@ -277,7 +277,7 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
    *   - 'subdirectory': any subdirectory of the file within the extension
    *      directory.
    *   - 'string': the contents of the file.
-   * @param ArchiveTar $archiver
+   * @param \Drupal\Core\Archiver\ArchiveTar $archiver
    *   The archiver.
    *
    * @throws Exception

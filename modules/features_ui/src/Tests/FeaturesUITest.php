@@ -14,6 +14,9 @@ class FeaturesUITest extends WebTestBase {
   use StringTranslationTrait;
 
   /**
+   * The variable.
+   *
+   * @var mixed
    * @todo Remove the disabled strict config schema checking.
    */
   protected $strictConfigSchema = FALSE;

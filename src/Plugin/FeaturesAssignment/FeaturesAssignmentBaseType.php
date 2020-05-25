@@ -23,6 +23,7 @@ use Drupal\features\FeaturesAssignmentMethodBase;
  * )
  */
 class FeaturesAssignmentBaseType extends FeaturesAssignmentMethodBase {
+
   /**
    * {@inheritdoc}
    */

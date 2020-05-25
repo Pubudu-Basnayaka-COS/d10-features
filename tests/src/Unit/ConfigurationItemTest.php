@@ -1,6 +1,7 @@
 <?php
 
 namespace Drupal\Tests\features\Unit;
+
 use Drupal\features\ConfigurationItem;
 use Drupal\features\FeaturesManagerInterface;
 use PHPUnit\Framework\TestCase;

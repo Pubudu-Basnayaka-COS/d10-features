@@ -16,6 +16,9 @@ class FeaturesCreateUITest extends WebTestBase {
   use StringTranslationTrait;
 
   /**
+   * The variable.
+   *
+   * @var mixed
    * @todo Remove the disabled strict config schema checking.
    */
   protected $strictConfigSchema = FALSE;
@@ -29,7 +32,7 @@ class FeaturesCreateUITest extends WebTestBase {
    * Tests creating a feature via UI and download it.
    */
   public function testCreateFeaturesUI() {
-    list($major, $minor, ) = explode('.', \Drupal::VERSION);
+    list($major, $minor,) = explode('.', \Drupal::VERSION);
     // In D8.3 the module category was removed from the module name field.
     $name_prefix = (intval($major) == 8 && intval($minor) > 2) ? 'modules[' : 'modules[Other][';
 
@@ -108,7 +111,7 @@ class FeaturesCreateUITest extends WebTestBase {
     $parsed_features_info = Yaml::decode(file_get_contents($features_info_filename));
     $this->assertEqual([
       'excluded' => ['system.theme'],
-      'required' => true,
+      'required' => TRUE,
     ], $parsed_features_info);
 
     $this->drupalGet('admin/modules');

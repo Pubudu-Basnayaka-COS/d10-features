@@ -36,9 +36,9 @@ class FeaturesConfigInstaller extends ConfigInstaller {
    * Constructs the configuration installer.
    *
    * @param \Drupal\Core\Config\ConfigInstallerInterface $config_installer
-   *    The configuration installer.
+   *   The configuration installer.
    * @param \Drupal\features\FeaturesManagerInterface $features_manager
-   *    The features manager.
+   *   The features manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
    * @param \Drupal\Core\Config\StorageInterface $active_storage
@@ -54,7 +54,7 @@ class FeaturesConfigInstaller extends ConfigInstaller {
     $this->configInstaller = $config_installer;
     $this->featuresManager = $features_manager;
 
-    list($major, $minor, ) = explode('.', \Drupal::VERSION);
+    list($major, $minor,) = explode('.', \Drupal::VERSION);
     if ($major == 8 && $minor > 2) {
       // D8.3 added the %install_profile% argument.
       $install_profile = \Drupal::installProfile();

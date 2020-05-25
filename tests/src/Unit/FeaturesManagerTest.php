@@ -32,42 +32,58 @@ use Prophecy\Argument;
  */
 class FeaturesManagerTest extends UnitTestCase {
   /**
+   * The name of the install profile.
+   *
    * @var string
    *   The name of the install profile.
    */
   const PROFILE_NAME = 'my_profile';
 
   /**
+   * The feature manager interface.
+   *
    * @var \Drupal\features\FeaturesManagerInterface
    */
   protected $featuresManager;
 
   /**
+   * The entity type manager object.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface|\PHPUnit_Framework_MockObject_MockObject
    */
   protected $entityTypeManager;
 
   /**
+   * The storage interface object.
+   *
    * @var \Drupal\Core\Config\StorageInterface|\PHPUnit_Framework_MockObject_MockObject
    */
   protected $configStorage;
 
   /**
+   * The config factory.
+   *
    * @var \Drupal\Core\Config\ConfigFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
    */
   protected $configFactory;
 
   /**
+   * The config manager.
+   *
    * @var \Drupal\Core\Config\ConfigManagerInterface|\PHPUnit_Framework_MockObject_MockObject
    */
   protected $configManager;
 
   /**
+   * The module handler.
+   *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
    */
   protected $moduleHandler;
 
   /**
+   * The extension.
+   *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
    */
   protected $configReverter;
@@ -249,7 +265,9 @@ class FeaturesManagerTest extends UnitTestCase {
     $this->assertEquals([], array_keys($filtered_packages));
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   protected function getAssignInterPackageDependenciesConfigCollection() {
     $config_collection = [];
     $config_collection['example.config'] = (new ConfigurationItem('example.config', [
@@ -266,7 +284,7 @@ class FeaturesManagerTest extends UnitTestCase {
     ]))
       ->setSubdirectory(InstallStorage::CONFIG_INSTALL_DIRECTORY)
       ->setPackage('package');
-    $config_collection['example.config2'] =  (new ConfigurationItem('example.config2', [
+    $config_collection['example.config2'] = (new ConfigurationItem('example.config2', [
       'dependencies' => [],
     ]))
       ->setSubdirectory(InstallStorage::CONFIG_INSTALL_DIRECTORY)
@@ -282,17 +300,17 @@ class FeaturesManagerTest extends UnitTestCase {
     ]))
       ->setSubdirectory(InstallStorage::CONFIG_INSTALL_DIRECTORY)
       ->setProvider(static::PROFILE_NAME);
-    $config_collection['example.config5'] =  (new ConfigurationItem('example.config5', [
+    $config_collection['example.config5'] = (new ConfigurationItem('example.config5', [
       'dependencies' => [],
     ]))
       ->setSubdirectory(InstallStorage::CONFIG_OPTIONAL_DIRECTORY)
       ->setPackage('package3');
-    $config_collection['example.config6'] =  (new ConfigurationItem('example.config6', [
+    $config_collection['example.config6'] = (new ConfigurationItem('example.config6', [
       'dependencies' => [],
     ]))
       ->setSubdirectory(InstallStorage::CONFIG_INSTALL_DIRECTORY)
       ->setProvider('my_uninstalled_feature');
-    $config_collection['example.config7'] =  (new ConfigurationItem('example.config7', [
+    $config_collection['example.config7'] = (new ConfigurationItem('example.config7', [
       'dependencies' => [],
     ]))
       ->setSubdirectory(InstallStorage::CONFIG_INSTALL_DIRECTORY)
@@ -480,7 +498,6 @@ class FeaturesManagerTest extends UnitTestCase {
     $this->assertEquals('', $config_collection[1]->getPackage());
   }
 
-
   /**
    * @covers ::detectMissing
    */
@@ -501,7 +518,7 @@ class FeaturesManagerTest extends UnitTestCase {
    */
   public function testDetectOverrides() {
     $config_diff = $this->prophesize(ConfigDiffInterface::class);
-    $config_diff->same(Argument::cetera())->will(function($args) {
+    $config_diff->same(Argument::cetera())->will(function ($args) {
       return $args[0] == $args[1];
     });
     \Drupal::getContainer()->set('config_update.config_diff', $config_diff->reveal());
@@ -526,7 +543,6 @@ class FeaturesManagerTest extends UnitTestCase {
       'key2' => 'value0',
     ]);
 
-
     $features_manager = new TestFeaturesManager($this->root, $this->entityTypeManager, $this->configFactory, $config_storage->reveal(), $this->configManager, $this->moduleHandler, $this->configReverter);
     $features_manager->setExtensionStorages($extension_storage->reveal());
 
@@ -549,7 +565,7 @@ class FeaturesManagerTest extends UnitTestCase {
       'test_config2' => new ConfigurationItem('test_config2', [
         'dependencies' => [
           'module' => ['example', 'example2'],
-        ]
+        ],
       ], [
         'subdirectory' => InstallStorage::CONFIG_INSTALL_DIRECTORY,
       ]),
@@ -560,7 +576,7 @@ class FeaturesManagerTest extends UnitTestCase {
       'test_config3' => new ConfigurationItem('test_config3', [
         'dependencies' => [
           'module' => ['example2'],
-        ]
+        ],
       ], [
         'subdirectory' => InstallStorage::CONFIG_OPTIONAL_DIRECTORY,
       ]),
@@ -692,12 +708,18 @@ class FeaturesManagerTest extends UnitTestCase {
     $this->assertEquals(FeaturesManagerInterface::STATUS_INSTALLED, $result->getStatus());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function testDetectNewWithNoConfig() {
     $package = new Package('test_feature');
 
     $this->assertEmpty($this->featuresManager->detectNew($package));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function testDetectNewWithNoNewConfig() {
     $package = new Package('test_feature', ['config' => ['test_config']]);
 
@@ -712,6 +734,9 @@ class FeaturesManagerTest extends UnitTestCase {
     $this->assertEmpty($features_manager->detectNew($package));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function testDetectNewWithNewConfig() {
     $package = new Package('test_feature', ['config' => ['test_config']]);
 
@@ -725,6 +750,8 @@ class FeaturesManagerTest extends UnitTestCase {
   }
 
   /**
+   * The test for merge info array.
+   *
    * @todo This could have of course much more test coverage.
    *
    * @covers ::mergeInfoArray
@@ -735,13 +762,16 @@ class FeaturesManagerTest extends UnitTestCase {
     $this->assertSame($expected, $this->featuresManager->mergeInfoArray($info1, $info2, $keys));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function providerTestMergeInfoArray() {
     $data = [];
     $data['empty-info'] = [[], [], []];
     $data['override-info'] = [
       ['name' => 'New name', 'core' => '8.x'],
       ['name' => 'Old name', 'core' => '8.x'],
-      ['name' => 'New name']
+      ['name' => 'New name'],
     ];
     $data['dependency-merging'] = [
       ['dependencies' => ['a', 'b', 'c', 'd', 'e']],
@@ -755,7 +785,7 @@ class FeaturesManagerTest extends UnitTestCase {
 
   /**
    * @covers ::initPackage
-   **/
+   */
   public function testInitPackageWithNewPackage() {
     $bundle = new FeaturesBundle(['machine_name' => 'test'], 'features_bundle');
 
@@ -778,7 +808,7 @@ class FeaturesManagerTest extends UnitTestCase {
   /**
    * @covers ::getFeaturesInfo
    * @covers ::getFeaturesModules
-   **/
+   */
   public function testInitPackageWithExistingPackage() {
     $bundle = new FeaturesBundle(['machine_name' => 'test'], 'features_bundle');
 
@@ -795,7 +825,7 @@ type: module
 core: 8.x
 description: test description 2
 EOT
-      ,
+          ,
           'test_feature.features.yml' => <<<EOT
 bundle: test
 excluded:
@@ -877,7 +907,7 @@ EOT
 
     $this->assertEquals('test_config.yml', $files['test_config']['filename']);
     $this->assertEquals(Yaml::encode([
-      'foo' => 'bar'
+      'foo' => 'bar',
     ]), $files['test_config']['string']);
 
     $this->assertEquals('test_feature.features.yml', $files['features']['filename']);
@@ -933,13 +963,18 @@ EOT
   }
 
 }
-
+/**
+ * {@inheritDoc}
+ */
 class TestFeaturesManager extends FeaturesManager {
 
   protected $allModules;
 
   /**
+   * Set extension storages.
+   *
    * @param \Drupal\features\FeaturesExtensionStoragesInterface $extensionStorages
+   *   The feature extension storages interface.
    */
   public function setExtensionStorages($extensionStorages) {
     $this->extensionStorages = $extensionStorages;
@@ -956,6 +991,8 @@ class TestFeaturesManager extends FeaturesManager {
   }
 
   /**
+   * Set all modules.
+   *
    * @param mixed $all_modules
    */
   public function setAllModules($all_modules) {
@@ -963,6 +1000,9 @@ class TestFeaturesManager extends FeaturesManager {
     return $this;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   protected function drupalGetProfile() {
     return FeaturesManagerTest::PROFILE_NAME;
   }

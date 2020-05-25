@@ -6,10 +6,11 @@ use Drupal\Core\Config\Entity\ConfigDependencyManager;
 use Drupal\Core\Config\Entity\ConfigEntityDependency;
 
 /**
- * Class FeaturesConfigDependencyManager
+ * Class FeaturesConfigDependencyManager.
+ *
  * @package Drupal\features
  */
-class FeaturesConfigDependencyManager extends ConfigDependencyManager{
+class FeaturesConfigDependencyManager extends ConfigDependencyManager {
 
   protected $sorted_graph;
 

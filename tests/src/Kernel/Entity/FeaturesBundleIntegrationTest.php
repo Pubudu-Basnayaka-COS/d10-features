@@ -15,8 +15,11 @@ class FeaturesBundleIntegrationTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules  = ['features'];
+  public static $modules = ['features'];
 
+  /**
+   * {@inheritDoc}
+   */
   public function testCrud() {
     $bundle = FeaturesBundle::create([
       'machine_name' => 'test',

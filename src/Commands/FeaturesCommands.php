@@ -22,7 +22,7 @@ use Drush\Utils\StringUtils;
  */
 class FeaturesCommands extends DrushCommands {
 
-  const OPTIONS =[
+  const OPTIONS = [
     'bundle' => NULL,
   ];
 
@@ -264,9 +264,7 @@ class FeaturesCommands extends DrushCommands {
           $state = FeaturesManagerInterface::STATE_OVERRIDDEN;
         }
 
-        $packageState = ($state != FeaturesManagerInterface::STATE_DEFAULT)
-          ? $manager->stateLabel($state)
-          : '';
+        $packageState = ($state != FeaturesManagerInterface::STATE_DEFAULT) ? $manager->stateLabel($state) : '';
 
         $result[$package->getMachineName()] = [
           'name' => $package->getName(),

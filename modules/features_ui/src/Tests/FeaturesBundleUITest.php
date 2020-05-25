@@ -2,7 +2,6 @@
 
 namespace Drupal\features_ui\Tests;
 
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\features\FeaturesBundleInterface;
 use Drupal\simpletest\WebTestBase;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -16,6 +15,9 @@ class FeaturesBundleUITest extends WebTestBase {
   use StringTranslationTrait;
 
   /**
+   * The variable.
+   *
+   * @var mixed
    * @todo Remove the disabled strict config schema checking.
    */
   protected $strictConfigSchema = FALSE;
@@ -28,7 +30,7 @@ class FeaturesBundleUITest extends WebTestBase {
   /**
    * The features bundle storage.
    *
-   * @var \Drupal\Core\Entity\EntityStorageInterface $bundleStorage
+   * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $bundleStorage;
 

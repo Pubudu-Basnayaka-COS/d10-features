@@ -103,7 +103,7 @@ class FeaturesManager implements FeaturesManagerInterface {
   /**
    * Whether the packages have been assigned a bundle prefix.
    *
-   * @var boolean
+   * @var bool
    */
   protected $packagesPrefixed;
 
@@ -137,10 +137,9 @@ class FeaturesManager implements FeaturesManagerInterface {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\config_update\ConfigRevertInterface $config_reverter
+   *   The config revert interface.
    */
-  public function __construct($root, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory,
-                              StorageInterface $config_storage, ConfigManagerInterface $config_manager,
-                              ModuleHandlerInterface $module_handler, ConfigRevertInterface $config_reverter) {
+  public function __construct($root, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, StorageInterface $config_storage, ConfigManagerInterface $config_manager, ModuleHandlerInterface $module_handler, ConfigRevertInterface $config_reverter) {
     $this->root = $root;
     $this->entityTypeManager = $entity_type_manager;
     $this->configStorage = $config_storage;
@@ -521,7 +520,7 @@ class FeaturesManager implements FeaturesManagerInterface {
     if (isset($this->packages[$machine_name])) {
       return $this->packages[$machine_name];
     }
-    // Also look for existing package within the bundle
+    // Also look for existing package within the bundle.
     elseif (isset($bundle) && isset($this->packages[$bundle->getFullName($machine_name)])) {
       return $this->packages[$bundle->getFullName($machine_name)];
     }
@@ -542,12 +541,15 @@ class FeaturesManager implements FeaturesManagerInterface {
   }
 
   /**
-   * Helper function to update dependencies array for a specific config item
-   * @param \Drupal\features\ConfigurationItem $config a config item
+   * Helper function to update dependencies array for a specific config item.
+   *
+   * @param \Drupal\features\ConfigurationItem $config
+   *   a config item.
    * @param array $module_list
+   *
    * @return array $dependencies
    */
-  protected function getConfigDependency(ConfigurationItem $config, $module_list = []) {
+  protected function getConfigDependency(ConfigurationItem $config, array $module_list = []) {
     $dependencies = [];
     $type = $config->getType();
 
@@ -599,17 +601,17 @@ class FeaturesManager implements FeaturesManagerInterface {
         //   - the item hasn't already been assigned elsewhere, and
         //   - the package hasn't been excluded.
         // - and the item isn't already in the package.
-
         $item = &$config_collection[$item_name];
         $already_assigned = !empty($item->getPackage());
-        // If this is the profile package, we can reassign extension-provided configuration.
+        // If this is the profile package, we can reassign extension-provided
+        // configuration.
         $package_bundle = $this->getAssigner()->getBundle($package->getBundle());
         $is_profile_package = isset($package_bundle) ? $package_bundle->isProfilePackage($package_name) : FALSE;
         // An item is assignable if:
         // - it is not provider excluded or this is the profile package, and
         // - it is not flagged as excluded.
         $assignable = (!$item->isProviderExcluded() || $is_profile_package) && !$item->isExcluded();
-        // An item is assignable if it was provided by the current package
+        // An item is assignable if it was provided by the current package.
         $assignable = $assignable || ($item->getProvider() == $package->getMachineName());
         $excluded_from_package = in_array($package_name, $item->getPackageExcluded());
         $already_in_package = in_array($item_name, $package->getConfig());
@@ -622,7 +624,7 @@ class FeaturesManager implements FeaturesManagerInterface {
           $module_dependencies = $this->getConfigDependency($item, $module_list);
           $package->setDependencies($this->mergeUniqueItems($package->getDependencies(), $module_dependencies));
         }
-        // Return memory
+        // Return memory.
         unset($item);
       }
     }
@@ -644,7 +646,7 @@ class FeaturesManager implements FeaturesManagerInterface {
     // Sort by key so that specific package will claim items before general
     // package. E.g., event_registration and registration_event will claim
     // before event.
-    uksort($patterns, function($a, $b) {
+    uksort($patterns, function ($a, $b) {
       // Count underscores to determine specificity of the package.
       return (int) (substr_count($a, '_') <= substr_count($b, '_'));
     });
@@ -808,14 +810,14 @@ class FeaturesManager implements FeaturesManagerInterface {
     unset($package);
   }
 
- /**
-  * Gets the name of the currently active installation profile.
-  *
-  * @return string|null $profile
-  *   The name of the installation profile or NULL if no installation profile is
-  *   currently active. This is the case for example during the first steps of
-  *   the installer or during unit tests.
-  */
+  /**
+   * Gets the name of the currently active installation profile.
+   *
+   * @return string|null
+   *   The name of the installation profile or NULL if no installation profile is
+   *   currently active. This is the case for example during the first steps of
+   *   the installer or during unit tests.
+   */
   protected function drupalGetProfile() {
     return drupal_get_profile();
   }
@@ -833,7 +835,7 @@ class FeaturesManager implements FeaturesManagerInterface {
    * @return array
    *   The merged, sorted and unique items.
    */
-  protected function mergeUniqueItems($items, $new_items) {
+  protected function mergeUniqueItems(array $items, array $new_items) {
     $items = array_unique(array_merge($items, $new_items));
     sort($items);
     return $items;
@@ -966,7 +968,7 @@ class FeaturesManager implements FeaturesManagerInterface {
     if ($info['type'] == 'profile') {
       // Set the distribution name.
       $info['distribution'] = [
-        'name' => $info['name']
+        'name' => $info['name'],
       ];
     }
 
@@ -974,13 +976,13 @@ class FeaturesManager implements FeaturesManagerInterface {
       'filename' => $package->getMachineName() . '.info.yml',
       'subdirectory' => NULL,
       // Filter to remove any empty keys, e.g., an empty themes array.
-      'string' => Yaml::encode(array_filter($info))
+      'string' => Yaml::encode(array_filter($info)),
     ], 'info');
 
     $package->appendFile([
       'filename' => $package->getMachineName() . '.features.yml',
       'subdirectory' => NULL,
-      'string' => Yaml::encode($features_info)
+      'string' => Yaml::encode($features_info),
     ], 'features');
   }
 
@@ -1000,7 +1002,7 @@ class FeaturesManager implements FeaturesManagerInterface {
         $package->appendFile([
           'filename' => $config->getName() . '.yml',
           'subdirectory' => $config->getSubdirectory(),
-          'string' => Yaml::encode($config->getData())
+          'string' => Yaml::encode($config->getData()),
         ], $name);
       }
     }
@@ -1284,6 +1286,9 @@ class FeaturesManager implements FeaturesManagerInterface {
     return $result;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   protected function addConfigList($full_name, &$list) {
     $index = array_search($full_name, $list);
     if ($index !== FALSE) {
@@ -1298,7 +1303,7 @@ class FeaturesManager implements FeaturesManagerInterface {
     }
   }
 
-    /**
+  /**
    * {@inheritdoc}
    */
   public function statusLabel($status) {
@@ -1355,7 +1360,7 @@ class FeaturesManager implements FeaturesManagerInterface {
       if (empty($item)) {
         $config = $this->configReverter->getFromExtension('', $name);
         // For testing purposes, if it couldn't load from a module, get config
-        // from the cached Config Collection
+        // from the cached Config Collection.
         if (empty($config) && isset($existing_config[$name])) {
           $config = $existing_config[$name]->getData();
         }
@@ -1367,7 +1372,8 @@ class FeaturesManager implements FeaturesManagerInterface {
     $existing = array_intersect_key($config_to_create, $existing_config);
     $new = array_diff_key($config_to_create, $existing);
 
-    // The FeaturesConfigInstaller exposes the normally protected createConfiguration
+    // The FeaturesConfigInstaller exposes the normally protected
+    // createConfiguration
     // function from Core ConfigInstaller than handles the creation of new
     // config or the changing of existing config.
     /** @var \Drupal\features\FeaturesConfigInstaller $config_installer */

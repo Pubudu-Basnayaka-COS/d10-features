@@ -26,6 +26,7 @@ use Drupal\features\FeaturesAssignmentMethodBase;
  * )
  */
 class FeaturesAssignmentExclude extends FeaturesAssignmentMethodBase {
+
   /**
    * {@inheritdoc}
    */
@@ -84,7 +85,7 @@ class FeaturesAssignmentExclude extends FeaturesAssignmentMethodBase {
           $modules = $this->featuresManager->getFeaturesModules($current_bundle);
           foreach ($modules as $extension) {
             // Only make exception for uninstalled modules or
-            // if namespace_any is set
+            // if namespace_any is set.
             if (!empty($exclude_module['namespace_any']) || !$this->featuresManager->extensionEnabled($extension)) {
               $extension_list = array_merge($extension_list, $this->featuresManager->listExtensionConfig($extension));
             }

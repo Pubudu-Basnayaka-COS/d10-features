@@ -23,6 +23,9 @@ class PackageTest extends TestCase {
     $this->assertEquals('test_bundle', $package->getBundle());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function testGetConfig() {
     $package = new Package('test_feature', ['config' => ['test_config_a', 'test_config_b']]);
     $this->assertEquals(['test_config_a', 'test_config_b'], $package->getConfig());
@@ -30,6 +33,8 @@ class PackageTest extends TestCase {
   }
 
   /**
+   * The test append config.
+   *
    * @depends testGetConfig
    * @covers ::appendConfig
    */
@@ -42,6 +47,8 @@ class PackageTest extends TestCase {
   }
 
   /**
+   * The test remove config.
+   *
    * @depends testAppendConfig
    * @covers ::removeConfig
    */

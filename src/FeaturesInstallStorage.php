@@ -35,7 +35,7 @@ class FeaturesInstallStorage extends ExtensionInstallStorage {
    *   default collection.
    */
   public function __construct(StorageInterface $config_storage, $directory = self::CONFIG_INSTALL_DIRECTORY, $collection = StorageInterface::DEFAULT_COLLECTION) {
-    list($major, $minor, ) = explode('.', \Drupal::VERSION);
+    list($major, $minor,) = explode('.', \Drupal::VERSION);
     if ($major == 8 && $minor > 2) {
       // D8.3 added the %profile% argument.
       $profile = \Drupal::installProfile();
@@ -57,8 +57,8 @@ class FeaturesInstallStorage extends ExtensionInstallStorage {
    * \Drupal\Core\Config\ConfigInstaller and
    * \Drupal\Core\Config\TypedConfigManager.
    *
-   * NOTE: This code is copied from ExtensionInstallStorage::getAllFolders() with
-   * the following changes (Notes in CHANGED below)
+   * NOTE: This code is copied from ExtensionInstallStorage::getAllFolders()
+   * with the following changes (Notes in CHANGED below)
    *   - Load all modules whether installed or not
    *
    * @return array
@@ -75,7 +75,8 @@ class FeaturesInstallStorage extends ExtensionInstallStorage {
       // @todo Remove this scan as part of https://www.drupal.org/node/2186491
       $listing = new ExtensionDiscovery(\Drupal::root());
 
-      // CHANGED START: Add profile directories for any bundles that use a profile.
+      // CHANGED START: Add profile directories for any bundles that use a
+      // profile.
       $listing->setProfileDirectoriesFromSettings();
       $profile_directories = $listing->getProfileDirectories();
       if ($this->includeProfile) {
@@ -94,16 +95,14 @@ class FeaturesInstallStorage extends ExtensionInstallStorage {
         }
       }
       $listing->setProfileDirectories($profile_directories);
-      // CHANGED END
-
+      // CHANGED END.
       if (!empty($extensions['module'])) {
 
         // CHANGED START: Find ANY modules, not just installed ones.
-        //$modules = $extensions['module'];
+        // $modules = $extensions['module'];.
         $module_list_scan = $listing->scan('module');
         $modules = $module_list_scan;
-        // CHANGED END
-
+        // CHANGED END.
         // Remove the install profile as this is handled later.
         unset($modules[$install_profile]);
         $profile_list = $listing->scan('profile');
@@ -129,7 +128,7 @@ class FeaturesInstallStorage extends ExtensionInstallStorage {
         }
         $this->folders += $this->getComponentNames($features_list);
         $this->folders += $this->getComponentNames($module_list);
-        // CHANGED END
+        // CHANGED END.
       }
       if (!empty($extensions['theme'])) {
         $theme_list_scan = $listing->scan('theme');

@@ -59,7 +59,7 @@ class AssignmentProfileForm extends AssignmentFormBase {
     return $form;
   }
 
- /**
+  /**
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
