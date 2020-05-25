@@ -677,18 +677,20 @@ class FeaturesEditForm extends FormBase {
       $config_count[$component] = 0;
       // Add selected items from Sources checkboxes.
       if (!$form_state->isValueEmpty([$component, 'sources', 'selected'])) {
-        $config_new[$component] = array_merge($config_new[$component], $this->domDecodeOptions(array_filter($form_state->getValue([
+        // Don't use the array_merge function, otherwise configs like
+        // "metatag.metatag_defaults.404" will have the key "404" be reindexed.
+        $config_new[$component] = $config_new[$component] + $this->domDecodeOptions(array_filter($form_state->getValue([
           $component,
           'sources',
           'selected',
-        ]))));
+        ])));
         $config_count[$component]++;
       }
       // Add selected items from already Included, newly Added, auto-detected
       // checkboxes.
       foreach (['included', 'added', 'detected'] as $section) {
         if (!$form_state->isValueEmpty([$component, $section])) {
-          $config_new[$component] = array_merge($config_new[$component], $this->domDecodeOptions(array_filter($form_state->getValue([$component, $section]))));
+          $config_new[$component] = $config_new[$component] + $this->domDecodeOptions(array_filter($form_state->getValue([$component, $section])));
           $config_count[$component]++;
         }
       }
