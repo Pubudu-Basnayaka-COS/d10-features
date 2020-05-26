@@ -385,7 +385,7 @@ class FeaturesCommands extends DrushCommands {
     if (empty($packages)) {
       $packages = $all_packages;
       $dt_args = ['@modules' => implode(', ', array_keys($packages))];
-      drush_print(dt('The following extensions will be exported: @modules',
+      $this->output()->writeln(dt('The following extensions will be exported: @modules',
         $dt_args));
       if (!$this->io()->confirm('Do you really want to continue?')) {
         throw new UserAbortException();
@@ -399,7 +399,7 @@ class FeaturesCommands extends DrushCommands {
     if ($existing_packages = $manager->listPackageDirectories($packages,
       $current_bundle)) {
       foreach ($existing_packages as $name => $directory) {
-        drush_print(dt("The extension @name already exists at @directory.",
+        $this->output()->writeln(dt("The extension @name already exists at @directory.",
           ['@name' => $name, '@directory' => $directory]));
       }
       // Apparently, format_plural is not always available.
@@ -470,7 +470,7 @@ class FeaturesCommands extends DrushCommands {
       // If any packages exist, confirm before overwriting.
       if ($existing_packages = $manager->listPackageDirectories($packages)) {
         foreach ($existing_packages as $name => $directory) {
-          drush_print(dt("The extension @name already exists at @directory.",
+          $this->output()->writeln(dt("The extension @name already exists at @directory.",
             ['@name' => $name, '@directory' => $directory]));
         }
         // Apparently, format_plural is not always available.
@@ -489,7 +489,7 @@ class FeaturesCommands extends DrushCommands {
           $current_bundle);
         list($full_name, $path) = $manager->getExportInfo($package,
           $current_bundle);
-        drush_print(dt('Will create a new extension @name in @directory',
+        $this->output()->writeln(dt('Will create a new extension @name in @directory',
           ['@name' => $full_name, '@directory' => $path]));
         if (!$this->io()->confirm(dt('Do you really want to continue?'))) {
           throw new UserAbortException();
