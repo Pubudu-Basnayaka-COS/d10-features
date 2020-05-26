@@ -585,10 +585,15 @@ class FeaturesManager implements FeaturesManagerInterface {
   public function assignConfigPackage($package_name, array $item_names, $force = FALSE) {
     $config_collection = $this->getConfigCollection();
     $module_list = $this->moduleHandler->getModuleList();
+    $current_bundle = $this->assigner->getBundle();
 
     $packages =& $this->packages;
     if (isset($packages[$package_name])) {
       $package =& $packages[$package_name];
+    }
+    // Also look for existing package within the current bundle
+    elseif (isset($current_bundle) && isset($this->packages[$current_bundle->getFullName($package_name)])) {
+      $package =& $this->packages[$current_bundle->getFullName($package_name)];
     }
     else {
       throw new \Exception($this->t('Failed to package @package_name. Package not found.', ['@package_name' => $package_name]));
