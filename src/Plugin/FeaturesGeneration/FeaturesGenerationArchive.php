@@ -171,7 +171,7 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
     $this->archiveName = $filename . '.tar.gz';
     $archive_name = $this->fileSystem->getTempDirectory() . '/' . $this->archiveName;
     if (file_exists($archive_name)) {
-      file_unmanaged_delete($archive_name);
+      $this->fileSystem->delete($archive_name);
     }
 
     $archiver = new ArchiveTar($archive_name);

@@ -67,7 +67,7 @@ class FeaturesAssignmentExclude extends FeaturesAssignmentMethodBase {
           // FeaturesBundleInterface::getProfileName() would return the profile
           // for the current bundle, if any. We want the profile that was
           // installed.
-          $profile_name = drupal_get_profile();
+          $profile_name = \Drupal::installProfile();
           if (isset($all_modules[$profile_name])) {
             $profile_list = $this->featuresManager->listExtensionConfig($all_modules[$profile_name]);
             // If the configuration has been assigned to a feature that's

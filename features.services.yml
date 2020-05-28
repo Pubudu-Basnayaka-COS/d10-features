@@ -12,7 +12,7 @@ services:
       - [initFeaturesManager]
   features_generator:
     class: Drupal\features\FeaturesGenerator
-    arguments: ['@features.manager', '@plugin.manager.features_generation_method', '@features_assigner']
+    arguments: ['@features.manager', '@plugin.manager.features_generation_method', '@features_assigner', '@messenger', '@logger.channel.features']
     calls:
       - [initFeaturesManager]
   features.manager:
@@ -36,3 +36,7 @@ services:
     decorates: config.installer
     decoration_priority: 9
     arguments: ['@features.config.installer.inner', '@features.manager', '@config.factory', '@config.storage', '@config.typed', '@config.manager', '@event_dispatcher']
+
+  logger.channel.features:
+    parent: logger.channel_base
+    arguments: ['features']

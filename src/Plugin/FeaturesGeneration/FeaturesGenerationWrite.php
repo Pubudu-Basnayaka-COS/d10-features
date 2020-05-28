@@ -95,7 +95,7 @@ class FeaturesGenerationWrite extends FeaturesGenerationMethodBase implements Co
         ->getExtensionStorages()) as $directory) {
         $config_directory = $this->root . '/' . $existing_directory . '/' . $directory;
         if (is_dir($config_directory)) {
-          file_unmanaged_delete_recursive($config_directory);
+          $this->fileSystem->deleteRecursive($config_directory);
         }
       }
     }

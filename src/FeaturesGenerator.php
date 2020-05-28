@@ -4,7 +4,9 @@ namespace Drupal\features;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class responsible for performing package generation.
@@ -34,6 +36,20 @@ class FeaturesGenerator implements FeaturesGeneratorInterface {
   protected $assigner;
 
   /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
+   * A logger instance.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * Local cache for package generation method instances.
    *
    * @var array
@@ -49,11 +65,17 @@ class FeaturesGenerator implements FeaturesGeneratorInterface {
    *   The package generation methods plugin manager.
    * @param \Drupal\features\FeaturesAssignerInterface $assigner
    *   The feature assigner interface.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   A logger instance.
    */
-  public function __construct(FeaturesManagerInterface $features_manager, PluginManagerInterface $generator_manager, FeaturesAssignerInterface $assigner) {
+  public function __construct(FeaturesManagerInterface $features_manager, PluginManagerInterface $generator_manager, FeaturesAssignerInterface $assigner, MessengerInterface $messenger, LoggerInterface $logger) {
     $this->featuresManager = $features_manager;
     $this->generatorManager = $generator_manager;
     $this->assigner = $assigner;
+    $this->messenger = $messenger;
+    $this->logger = $logger;
   }
 
   /**
@@ -164,10 +186,10 @@ class FeaturesGenerator implements FeaturesGeneratorInterface {
     foreach ($return as $message) {
       if ($message['display']) {
         $type = $message['success'] ? 'status' : 'error';
-        drupal_set_message($this->t($message['message'], $message['variables']), $type);
+        $this->messenger->addMessage($this->t($message['message'], $message['variables']), $type);
       }
       $type = $message['success'] ? 'notice' : 'error';
-      \Drupal::logger('features')->{$type}($message['message'], $message['variables']);
+      $this->logger->{$type}($message['message'], $message['variables']);
     }
     return $return;
   }

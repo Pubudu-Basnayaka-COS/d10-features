@@ -12,6 +12,41 @@ class AssignmentExcludeForm extends AssignmentFormBase {
   const METHOD_ID = 'exclude';
 
   /**
+   * The install profile extension list.
+   *
+   * @var \Drupal\Core\Extension\ExtensionList[]
+   */
+  protected $profileList;
+
+  /**
+   * The install profile.
+   *
+   * @var string
+   */
+  protected $installProfile;
+
+  /**
+   * Constructs a AssignmentExcludeForm object.
+   *
+   * @param string $install_profile
+   *   The install profile.
+   */
+  public function __construct(array $profile_list, $install_profile) {
+    $this->profileList = $profile_list;
+    $this->installProfile = $install_profile;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('extension.list.profile'),
+      $container->getParameter('install_profile')
+    );
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getFormId() {
@@ -60,7 +95,7 @@ class AssignmentExcludeForm extends AssignmentFormBase {
       ],
     ];
 
-    $info = system_get_info('module', drupal_get_profile());
+    $info = $this->profileList->getExtensionInfo($this->installProfile);
     $form['module']['profile'] = [
       '#type' => 'checkbox',
       '#title' => $this->t("Don't exclude install profile's configuration"),

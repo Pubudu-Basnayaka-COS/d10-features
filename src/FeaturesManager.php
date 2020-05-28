@@ -207,7 +207,7 @@ class FeaturesManager implements FeaturesManagerInterface {
     }
     else {
       foreach ($this->entityTypeManager->getDefinitions() as $entity_type => $definition) {
-        if ($definition->isSubclassOf('Drupal\Core\Config\Entity\ConfigEntityInterface')) {
+        if ($definition->entityClassImplements('Drupal\Core\Config\Entity\ConfigEntityInterface')) {
           $prefix = $definition->getConfigPrefix() . '.';
           if (strpos($fullname, $prefix) === 0) {
             $result['type'] = $entity_type;
@@ -824,7 +824,7 @@ class FeaturesManager implements FeaturesManagerInterface {
    *   the installer or during unit tests.
    */
   protected function drupalGetProfile() {
-    return drupal_get_profile();
+    return \Drupal::installProfile();
   }
 
   /**
@@ -1042,7 +1042,7 @@ class FeaturesManager implements FeaturesManagerInterface {
   public function listConfigTypes($bundles_only = FALSE) {
     $definitions = [];
     foreach ($this->entityTypeManager->getDefinitions() as $entity_type => $definition) {
-      if ($definition->isSubclassOf('Drupal\Core\Config\Entity\ConfigEntityInterface')) {
+      if ($definition->entityClassImplements('Drupal\Core\Config\Entity\ConfigEntityInterface')) {
         if (!$bundles_only || $definition->getBundleOf()) {
           $definitions[$entity_type] = $definition;
         }
@@ -1098,7 +1098,7 @@ class FeaturesManager implements FeaturesManagerInterface {
     else {
       $definitions = [];
       foreach ($this->entityTypeManager->getDefinitions() as $entity_type => $definition) {
-        if ($definition->isSubclassOf('Drupal\Core\Config\Entity\ConfigEntityInterface')) {
+        if ($definition->entityClassImplements('Drupal\Core\Config\Entity\ConfigEntityInterface')) {
           $definitions[$entity_type] = $definition;
         }
       }
