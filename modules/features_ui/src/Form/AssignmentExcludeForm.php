@@ -2,7 +2,12 @@
 
 namespace Drupal\features_ui\Form;
 
+use Drupal\features\FeaturesManagerInterface;
+use Drupal\features\FeaturesAssignerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ExtensionList;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Configures the selected configuration assignment method for this site.
@@ -14,7 +19,7 @@ class AssignmentExcludeForm extends AssignmentFormBase {
   /**
    * The install profile extension list.
    *
-   * @var \Drupal\Core\Extension\ExtensionList[]
+   * @var \Drupal\Core\Extension\ExtensionList
    */
   protected $profileList;
 
@@ -28,10 +33,21 @@ class AssignmentExcludeForm extends AssignmentFormBase {
   /**
    * Constructs a AssignmentExcludeForm object.
    *
+   * @param \Drupal\Core\Extension\ExtensionList $extension_list
+   *   The install profile extension list.
    * @param string $install_profile
    *   The install profile.
+   * @param \Drupal\features\FeaturesManagerInterface $features_manager
+   *   The features manager.
+   * @param \Drupal\features\FeaturesAssignerInterface $assigner
+   *   The assigner.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+
    */
-  public function __construct(array $profile_list, $install_profile) {
+  public function __construct(FeaturesManagerInterface $features_manager, FeaturesAssignerInterface $assigner, EntityTypeManagerInterface $entity_type_manager, ExtensionList $profile_list, $install_profile) {
+    parent::__construct($features_manager, $assigner, $entity_type_manager);
+
     $this->profileList = $profile_list;
     $this->installProfile = $install_profile;
   }
@@ -41,6 +57,9 @@ class AssignmentExcludeForm extends AssignmentFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('features.manager'),
+      $container->get('features_assigner'),
+      $container->get('entity_type.manager'),
       $container->get('extension.list.profile'),
       $container->getParameter('install_profile')
     );

@@ -4,7 +4,7 @@ namespace Drupal\features_ui\Tests;
 
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Archiver\ArchiveTar;
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -12,7 +12,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *
  * @group features_ui
  */
-class FeaturesCreateUITest extends WebTestBase {
+class FeaturesCreateUITest extends BrowserTestBase {
   use StringTranslationTrait;
 
   /**

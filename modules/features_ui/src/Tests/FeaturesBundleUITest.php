@@ -3,7 +3,7 @@
 namespace Drupal\features_ui\Tests;
 
 use Drupal\features\FeaturesBundleInterface;
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -11,7 +11,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *
  * @group features_ui
  */
-class FeaturesBundleUITest extends WebTestBase {
+class FeaturesBundleUITest extends BrowserTestBase {
   use StringTranslationTrait;
 
   /**
