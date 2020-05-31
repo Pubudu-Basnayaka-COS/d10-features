@@ -1,7 +1,7 @@
 name: Test Core
 type: module
-core: 8.x
+core_version_requirement: ^8.8 || ^9
 package: Test
 # Ensure features is enabled first
 dependencies:
-  - features
+  - features:features
