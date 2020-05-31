@@ -8,17 +8,18 @@ use Drupal\features\FeaturesAssignerInterface;
 use Drupal\features\FeaturesGeneratorInterface;
 use Drupal\features\FeaturesManagerInterface;
 use Drupal\features\FeaturesBundleInterface;
+use Drupal\features\Package;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\features\Package;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines the configuration export form.
  */
-class FeaturesExportForm extends FormBase {
+class FeaturesExportForm extends FormBase implements TrustedCallbackInterface {
 
   /**
    * The features manager.
@@ -77,6 +78,15 @@ class FeaturesExportForm extends FormBase {
       $container->get('features_generator'),
       $container->get('module_handler')
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return [
+      'preRenderRemoveInvalidCheckboxes',
+    ];
   }
 
   /**
