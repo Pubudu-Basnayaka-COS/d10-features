@@ -654,6 +654,6 @@ interface FeaturesManagerInterface {
    *     'new': list of new config created keyed by name.
    *     'updated': list of updated config keyed by name.
    */
-  public function import(array $modules, $any = FALSE);
+  public function import($modules, $any = FALSE);
 
 }
