@@ -469,11 +469,11 @@ class Package {
   }
 
   /**
-   * @param \string[] $features_info
+   * @param array|TRUE $features_info
    *
    * @return $this
    */
-  public function setFeaturesInfo(array $features_info) {
+  public function setFeaturesInfo($features_info) {
     if (isset($features_info['bundle'])) {
       $this->setBundle($features_info['bundle']);
     }
