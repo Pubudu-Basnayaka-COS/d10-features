@@ -474,8 +474,6 @@ EOT
 
   /**
    * @covers ::assignInterPackageDependencies
-   * @expectedException \Exception
-   * @expectedExceptionMessage The packages have not yet been prefixed with a bundle name
    */
   public function testAssignInterPackageDependenciesPrematureCall() {
     $bundle = $this->prophesize(FeaturesBundleInterface::class);
@@ -486,7 +484,9 @@ EOT
         'bundle' => 'giraffe',
       ]),
     ];
-
+    // TBD: why 'Error' and not 'Exception'?
+    $this->expectException('Error');
+    $this->expectExceptionMessag('The packages have not yet been prefixed with a bundle name');
     $this->featuresManager->assignInterPackageDependencies($bundle->reveal(), $packages);
   }
 
