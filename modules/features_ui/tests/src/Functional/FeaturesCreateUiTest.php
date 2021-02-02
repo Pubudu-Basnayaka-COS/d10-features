@@ -51,7 +51,7 @@ class FeaturesCreateUiTest extends BrowserTestBase {
       'name' => 'Test feature',
       'machine_name' => $feature_name,
       'description' => 'Test description: <strong>giraffe</strong>',
-      'version' => '8.x-1.0',
+      'version' => '1.0.0',
       'system_simple[sources][selected][system.theme]' => TRUE,
       'system_simple[sources][selected][user.settings]' => TRUE,
     ];

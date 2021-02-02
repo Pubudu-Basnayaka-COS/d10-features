@@ -870,22 +870,14 @@ class FeaturesManager implements FeaturesManagerInterface {
     if (!isset($bundle)) {
       $bundle = $this->getAssigner()->getBundle();
     }
+
     $package = new Package($machine_name, [
       'name' => isset($name) ? $name : ucwords(str_replace(['_', '-'], ' ', $machine_name)),
       'description' => $description,
       'type' => $type,
-      'core' => Drupal::CORE_COMPATIBILITY,
-      'dependencies' => [],
-      'themes' => [],
-      'config' => [],
       'status' => FeaturesManagerInterface::STATUS_DEFAULT,
-      'version' => '',
       'state' => FeaturesManagerInterface::STATE_DEFAULT,
-      'files' => [],
       'bundle' => $bundle->isDefault() ? '' : $bundle->getMachineName(),
-      'extension' => NULL,
-      'info' => [],
-      'configOrig' => [],
     ]);
 
     // If no extension was passed in, look for a match.
@@ -925,7 +917,7 @@ class FeaturesManager implements FeaturesManagerInterface {
       'name' => $package->getName(),
       'description' => $package->getDescription(),
       'type' => $package->getType(),
-      'core' => $package->getCore(),
+      'core_version_requirement' => $package->getCoreVersionRequirement(),
       'dependencies' => $package->getDependencies(),
       'themes' => $package->getThemes(),
       'version' => $package->getVersion(),

@@ -271,7 +271,7 @@ class FeaturesEditForm extends FormBase {
 
     $form['info']['version'] = [
       '#title' => $this->t('Version'),
-      '#description' => $this->t('Examples: 8.x-1.0, 8.x-1.0-beta1'),
+      '#description' => $this->t('Examples: 8.x-1.0, 3.1.4'),
       '#type' => 'textfield',
       '#required' => FALSE,
       '#default_value' => $this->package->getVersion(),

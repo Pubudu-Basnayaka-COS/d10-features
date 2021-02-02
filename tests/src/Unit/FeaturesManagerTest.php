@@ -155,7 +155,7 @@ class FeaturesManagerTest extends UnitTestCase {
           'test_feature.info.yml' => <<<EOT
 name: Test feature
 type: module
-core: 8.x
+core_version_requirement: "^8.8 || ^9"
 description: test description
 EOT
           ,
@@ -796,8 +796,8 @@ EOT
     $data = [];
     $data['empty-info'] = [[], [], []];
     $data['override-info'] = [
-      ['name' => 'New name', 'core' => '8.x'],
-      ['name' => 'Old name', 'core' => '8.x'],
+      ['name' => 'New name', 'core_version_requirement' => '^8.8 || ^9'],
+      ['name' => 'Old name', 'core_version_requirement' => '^8.8 || ^9'],
       ['name' => 'New name'],
     ];
     $data['dependency-merging'] = [
@@ -907,7 +907,7 @@ EOT
     $this->assertEquals(Yaml::encode([
       'name' => 'Test feature',
       'type' => 'module',
-      'core' => '8.x',
+      'core_version_requirement' => '^8.9 || ^9',
     ]), $files['info']['string']);
     $this->assertEquals(Yaml::encode(TRUE), $files['features']['string']);
 
