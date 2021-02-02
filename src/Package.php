@@ -486,11 +486,22 @@ class Package {
   }
 
   /**
+   * Sets the dependencies of a package.
+   *
+   * Ensures that dependencies are unique and do not include the package itself.
+   *
    * @param \string[] $dependencies
    *
    * @return $this
    */
   public function setDependencies(array $dependencies) {
+    $dependencies = array_unique($dependencies);
+    // Package shouldn't be dependent on itself.
+    $full_name = $this->getFullName();
+    if (in_array($full_name, $dependencies)) {
+      unset($dependencies[array_search($full_name, $dependencies)]);
+    }
+    sort($dependencies);
     $this->dependencies = $dependencies;
     return $this;
   }
@@ -501,8 +512,9 @@ class Package {
    * @return $this
    */
   public function appendDependency($dependency) {
-    $this->dependencies[] = $dependency;
-    return $this;
+    $dependencies = $this->getDependencies();
+    array_push($dependencies, $dependency);
+    return $this->setDependencies($dependencies);
   }
 
   /**

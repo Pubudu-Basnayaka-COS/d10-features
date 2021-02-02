@@ -791,9 +791,8 @@ class FeaturesManager implements FeaturesManagerInterface {
               $dependency_set = FALSE;
               if ($dependency_package = $config_collection[$dependency_name]->getPackage()) {
                 $package_name = $bundle->getFullName($dependency_package);
-                // Package shouldn't be dependent on itself.
-                if ($package_name && array_key_exists($package_name, $packages) && $package_name != $package->getMachineName() && isset($module_list[$package_name])) {
-                  $package->setDependencies($this->mergeUniqueItems($package->getDependencies(), [$package_name]));
+                if ($package_name && array_key_exists($package_name, $packages) && isset($module_list[$package_name])) {
+                  $package->appendDependency($package_name);
                   $dependency_set = TRUE;
                 }
               }
@@ -803,7 +802,7 @@ class FeaturesManager implements FeaturesManagerInterface {
                 // No extension should depend on the install profile.
                 $package_name = $bundle->getFullName($package->getMachineName());
                 if ($extension_name != $package_name && $extension_name != $this->drupalGetProfile() && isset($module_list[$extension_name])) {
-                  $package->setDependencies($this->mergeUniqueItems($package->getDependencies(), [$extension_name]));
+                  $package->appendDependency($extension_name);
                 }
               }
             }
@@ -828,7 +827,7 @@ class FeaturesManager implements FeaturesManagerInterface {
   }
 
   /**
-   * Merges a set of new item into an array and sorts the result.
+   * Merges a set of new item into an array.
    *
    * Only unique values are retained.
    *
@@ -838,11 +837,10 @@ class FeaturesManager implements FeaturesManagerInterface {
    *   An array of new items to be merged in.
    *
    * @return array
-   *   The merged, sorted and unique items.
+   *   The merged and unique items.
    */
   protected function mergeUniqueItems(array $items, array $new_items) {
     $items = array_unique(array_merge($items, $new_items));
-    sort($items);
     return $items;
   }
 
