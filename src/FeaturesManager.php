@@ -11,8 +11,10 @@ use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Extension\Dependency;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ExtensionDiscovery;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\config_update\ConfigRevertInterface;
@@ -71,6 +73,13 @@ class FeaturesManager implements FeaturesManagerInterface {
    * @var \Drupal\config_update\ConfigRevertInterface
    */
   protected $configReverter;
+
+  /**
+   * The module extension list service.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $moduleExtensionList;
 
   /**
    * The Features settings.
@@ -138,8 +147,10 @@ class FeaturesManager implements FeaturesManagerInterface {
    *   The module handler.
    * @param \Drupal\config_update\ConfigRevertInterface $config_reverter
    *   The config revert interface.
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
+   *   The module extension list service.
    */
-  public function __construct($root, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, StorageInterface $config_storage, ConfigManagerInterface $config_manager, ModuleHandlerInterface $module_handler, ConfigRevertInterface $config_reverter) {
+  public function __construct($root, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, StorageInterface $config_storage, ConfigManagerInterface $config_manager, ModuleHandlerInterface $module_handler, ConfigRevertInterface $config_reverter, ModuleExtensionList $module_extension_list) {
     $this->root = $root;
     $this->entityTypeManager = $entity_type_manager;
     $this->configStorage = $config_storage;
@@ -147,6 +158,7 @@ class FeaturesManager implements FeaturesManagerInterface {
     $this->moduleHandler = $module_handler;
     $this->configFactory = $config_factory;
     $this->configReverter = $config_reverter;
+    $this->moduleExtensionList = $module_extension_list;
     $this->settings = $config_factory->getEditable('features.settings');
     $this->extensionStorages = new FeaturesExtensionStoragesByDirectory($this->configStorage);
     $this->extensionStorages->addStorage(InstallStorage::CONFIG_INSTALL_DIRECTORY);
@@ -905,6 +917,32 @@ class FeaturesManager implements FeaturesManagerInterface {
   }
 
   /**
+   * Convert a Dependency object back to a string value.
+   *
+   * @param \Drupal\Core\Extension\Dependency $dependency
+   *   The dependency to convert.
+   * @return string
+   *   The normalized "project:name (constraint)" string.
+   */
+  protected function getDependencyString(Dependency $dependency) {
+    $dependency_name = $dependency->getName();
+    $project = $dependency->getProject();
+    if (empty($project)) {
+      $path = $this->moduleExtensionList->getPath($dependency_name);
+      // Handle project for core modules.
+      $project = (strpos($path, 'core/modules') === 0) ? 'drupal' : $dependency_name;
+      // Override with project key for contrib or custom modules.
+      $info = $this->moduleExtensionList->getExtensionInfo($dependency_name);
+      $project = isset($info['project']) ? $info['project'] : $project;
+    }
+    $new_dependency = $project . ':' . $dependency_name;
+    if ($constraint_string = $dependency->getConstraintString()) {
+      $new_dependency = $new_dependency . ' (' . $constraint_string . ')';
+    }
+    return $new_dependency;
+  }
+
+  /**
    * Generates and adds .info.yml files to a package.
    *
    * @param \Drupal\features\Package $package
@@ -1014,8 +1052,40 @@ class FeaturesManager implements FeaturesManagerInterface {
 
     $info = NestedArray::mergeDeep($info1, $info2);
 
-    // Process the dependencies and themes keys.
-    $keys = ['dependencies', 'themes'];
+    // Merge dependencies. Preserve constraints.
+    // Handle cases of mixed "project:module" and "module" dependencies.
+    $dependencies = [];
+    // First collect dependency list from info1.
+    if (!empty($info1['dependencies'])) {
+      foreach ($info1['dependencies'] as $dependency_string) {
+        $dependency = Dependency::createFromString($dependency_string);
+        $dependencies[$dependency->getName()] = $this->getDependencyString($dependency);
+      }
+    }
+    // Now merge dependencies from info2.
+    if (!empty($info2['dependencies'])) {
+      foreach ($info2['dependencies'] as $dependency_string) {
+        $dependency = Dependency::createFromString($dependency_string);
+        $dependency_name = $dependency->getName();
+        if (isset($dependencies[$dependency_name])) {
+          // Dependency already in list, so only overwrite if there is a constraint.
+          if ($dependency->getConstraintString()) {
+            $dependencies[$dependency_name] = $this->getDependencyString($dependency);
+          }
+        }
+        else {
+          // Wasn't in info1, so merge it into list.
+          $dependencies[$dependency_name] = $this->getDependencyString($dependency);
+        }
+      }
+    }
+    if (!empty($dependencies)) {
+      $info['dependencies'] = array_values($dependencies);
+      sort($info['dependencies']);
+    }
+
+    // Process themes keys.
+    $keys = ['themes'];
     foreach ($keys as $key) {
       if (isset($info[$key]) && is_array($info[$key])) {
         // NestedArray::mergeDeep() may produce duplicate values.

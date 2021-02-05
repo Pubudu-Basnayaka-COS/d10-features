@@ -64,8 +64,8 @@ abstract class FeaturesGenerationMethodBase implements FeaturesGenerationMethodI
 
     // Remove the 'core' property if present since it has been replaced with
     // 'core_version_requirement'.
-    if (isset($info['core'])) {
-      unset($info['core']);
+    if (isset($existing_info['core'])) {
+      unset($existing_info['core']);
     }
 
     return Yaml::encode($this->featuresManager->mergeInfoArray($existing_info, $package_info));
