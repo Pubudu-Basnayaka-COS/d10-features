@@ -1,6 +1,6 @@
 name: feature
 type: module
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: '^9.4 | ^10'
 package: Test
 # Force this to install after features.
 dependencies:

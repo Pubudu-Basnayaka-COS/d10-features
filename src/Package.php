@@ -41,13 +41,11 @@ class Package {
   protected $version = '';
 
   /**
-   * The package core version requirement..
+   * The package core version requirement.
    *
    * @var string
-   * @todo: Make coreVersionRequirement a property of the
-   *   FeaturesBundleInterface object. For now, hard-code it.
    */
-  protected $coreVersionRequirement = '^8.9 || ^9';
+  protected $coreVersionRequirement = FeaturesBundleInterface::CORE_VERSION_REQUIREMENT;
 
   /**
    * The package type.
