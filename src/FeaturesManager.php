@@ -788,7 +788,7 @@ class FeaturesManager implements FeaturesManagerInterface {
     /** @var \Drupal\features\Package[] $packages */
     foreach ($packages as $package) {
       foreach ($package->getConfig() as $item_name) {
-        if (!empty($config_collection[$item_name]->getData()['dependencies']['config'])) {
+        if (!empty($config_collection[$item_name]) && !empty($config_collection[$item_name]->getData()['dependencies']['config'])) {
           foreach ($config_collection[$item_name]->getData()['dependencies']['config'] as $dependency_name) {
             if (isset($config_collection[$dependency_name]) &&
               // For configuration in the
@@ -1030,6 +1030,9 @@ class FeaturesManager implements FeaturesManagerInterface {
     if ($package->getConfig()) {
       // Add configuration files.
       foreach ($package->getConfig() as $name) {
+        if (empty($config_collection[$name])) {
+          continue;
+        }
         $config = $config_collection[$name];
 
         $package->appendFile([
