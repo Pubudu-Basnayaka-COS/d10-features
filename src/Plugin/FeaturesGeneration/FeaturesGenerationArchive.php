@@ -6,7 +6,7 @@ use Drupal\Core\Access\CsrfTokenGenerator;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\features\FeaturesGenerationMethodBase;
 use Drupal\Core\Archiver\ArchiveTar;
-use Drupal\Core\File\FileSystem;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\features\FeaturesBundleInterface;
 use Drupal\features\Package;
@@ -41,7 +41,7 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
   /**
    * The file system service.
    *
-   * @var \Drupal\Core\File\FileSystem
+   * @var \Drupal\Core\File\FileSystemInterface
    */
   protected $fileSystem;
 
@@ -52,10 +52,10 @@ class FeaturesGenerationArchive extends FeaturesGenerationMethodBase implements 
    *   The app root.
    * @param \Drupal\Core\Access\CsrfTokenGenerator $csrf_token
    *   The CSRF token generator.
-   * @param \Drupal\Core\File\FileSystem $file_system
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system service.
    */
-  public function __construct($root, CsrfTokenGenerator $csrf_token, FileSystem $file_system) {
+  public function __construct($root, CsrfTokenGenerator $csrf_token, FileSystemInterface $file_system) {
     $this->root = $root;
     $this->csrfToken = $csrf_token;
     $this->fileSystem = $file_system;
