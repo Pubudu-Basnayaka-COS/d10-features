@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\features\Unit;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Drupal\features\Entity\FeaturesBundle;
 use Drupal\Tests\UnitTestCase;
 
@@ -11,10 +12,11 @@ use Drupal\Tests\UnitTestCase;
  */
 class FeaturesBundleTest extends UnitTestCase {
 
+  use ProphecyTrait;
   /**
    * {@inheritDoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     // Mock an assigner.

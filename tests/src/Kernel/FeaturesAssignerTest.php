@@ -20,7 +20,7 @@ class FeaturesAssignerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     // We need system.site in order to run $this->configImporter->import().
     $this->installConfig('system');
