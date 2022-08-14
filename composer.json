@@ -4,7 +4,7 @@
   "minimum-stability": "dev",
   "name": "drupal/features",
   "require": {
-    "drupal/config_update": "^1.4"
+    "drupal/config_update": "^1.4 || ^2"
   },
   "type": "drupal-module",
   "extra": {
