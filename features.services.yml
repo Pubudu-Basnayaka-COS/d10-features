@@ -34,7 +34,14 @@ services:
   features.config.installer:
     class: Drupal\features\FeaturesConfigInstaller
     decorates: config.installer
-    arguments: ['@features.config.installer.inner', '@features.manager', '@config.factory', '@config.storage', '@config.typed', '@config.manager', '@event_dispatcher', '%install_profile%']
+    arguments:
+      - '@config.factory'
+      - '@config.storage'
+      - '@config.typed'
+      - '@config.manager'
+      - '@event_dispatcher'
+      - '%install_profile%'
+      - '@extension.path.resolver'
     decoration_priority: 9
 
   logger.channel.features:
