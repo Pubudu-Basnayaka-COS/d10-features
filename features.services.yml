@@ -35,6 +35,8 @@ services:
     class: Drupal\features\FeaturesConfigInstaller
     decorates: config.installer
     arguments:
+      - '@features.config.installer.inner'
+      - '@features.manager'
       - '@config.factory'
       - '@config.storage'
       - '@config.typed'
