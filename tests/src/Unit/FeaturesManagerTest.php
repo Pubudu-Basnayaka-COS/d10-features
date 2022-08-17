@@ -104,7 +104,7 @@ class FeaturesManagerTest extends UnitTestCase {
 
     $container = new ContainerBuilder();
     $container->set('string_translation', $this->getStringTranslationStub());
-    $container->set('app.root', $this->root);
+    $container->setParameter('app.root', $this->root);
     // Since in Drupal 8.3 the "\Drupal::installProfile()" was introduced
     // then we have to spoof a value for the "install_profile" parameter
     // because it will be used by "ExtensionInstallStorage" class, which
@@ -165,7 +165,7 @@ class FeaturesManagerTest extends UnitTestCase {
 
   protected function setupVfsWithTestFeature() {
     vfsStream::setup('drupal');
-    \Drupal::getContainer()->set('app.root', 'vfs://drupal');
+    \Drupal::getContainer()->setParameter('app.root', 'vfs://drupal');
     vfsStream::create([
       'modules' => [
         'test_feature' => [

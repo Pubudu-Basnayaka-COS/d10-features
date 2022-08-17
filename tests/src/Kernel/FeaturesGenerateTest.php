@@ -131,7 +131,7 @@ class FeaturesGenerateTest extends KernelTestBase {
   public function testExportWrite() {
     // Set a fake drupal root, so the testbot can also write into it.
     vfsStream::setup('drupal');
-    \Drupal::getContainer()->set('app.root', 'vfs://drupal');
+    \Drupal::getContainer()->setParameter('app.root', 'vfs://drupal');
     $this->featuresManager->setRoot('vfs://drupal');
 
     $package = $this->featuresManager->getPackage(self::PACKAGE_NAME);
