@@ -15,7 +15,7 @@ class FeaturesManagerKernelTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['system', 'config', 'features'];
+  protected static $modules = ['system', 'config', 'features'];
 
   protected $strictConfigSchema = FALSE;
 

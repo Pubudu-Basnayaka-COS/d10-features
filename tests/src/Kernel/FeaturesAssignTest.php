@@ -23,7 +23,7 @@ class FeaturesAssignTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['features', 'node', 'system', 'user', self::TEST_INSTALLED_PACKAGE];
+  protected static $modules = ['features', 'node', 'system', 'user', self::TEST_INSTALLED_PACKAGE];
 
   /**
    * The Feature Manager.

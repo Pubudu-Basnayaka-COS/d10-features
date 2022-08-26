@@ -259,8 +259,8 @@ class FeaturesAssigner implements FeaturesAssignerInterface {
    */
   public function setCurrent(FeaturesBundleInterface $bundle) {
     $this->currentBundle = $bundle;
-    $session = \Drupal::request()->getSession();
-    if (isset($session)) {
+    if (\Drupal::request()->hasSession()) {
+      $session = \Drupal::request()->getSession();
       $session->set('features_current_bundle', $bundle->getMachineName());
     }
     return $bundle;

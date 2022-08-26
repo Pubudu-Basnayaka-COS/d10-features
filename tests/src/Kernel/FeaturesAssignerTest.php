@@ -13,7 +13,7 @@ class FeaturesAssignerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['system', 'config'];
+  protected static $modules = ['system', 'config'];
 
   protected $strictConfigSchema = FALSE;
 

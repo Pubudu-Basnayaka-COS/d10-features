@@ -14,6 +14,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Extension\Dependency;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ExtensionDiscovery;
+use Drupal\Core\Extension\ExtensionPathResolver;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -149,8 +150,10 @@ class FeaturesManager implements FeaturesManagerInterface {
    *   The config revert interface.
    * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
    *   The module extension list service.
+   * @param \Drupal\Core\Extension\ExtensionPathResolver $extension_path_resolver
+   *   Instance of the extension path resolver service.
    */
-  public function __construct($root, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, StorageInterface $config_storage, ConfigManagerInterface $config_manager, ModuleHandlerInterface $module_handler, ConfigRevertInterface $config_reverter, ModuleExtensionList $module_extension_list) {
+  public function __construct($root, EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, StorageInterface $config_storage, ConfigManagerInterface $config_manager, ModuleHandlerInterface $module_handler, ConfigRevertInterface $config_reverter, ModuleExtensionList $module_extension_list, ExtensionPathResolver $extension_path_resolver) {
     $this->root = $root;
     $this->entityTypeManager = $entity_type_manager;
     $this->configStorage = $config_storage;
@@ -160,7 +163,7 @@ class FeaturesManager implements FeaturesManagerInterface {
     $this->configReverter = $config_reverter;
     $this->moduleExtensionList = $module_extension_list;
     $this->settings = $config_factory->getEditable('features.settings');
-    $this->extensionStorages = new FeaturesExtensionStoragesByDirectory($this->configStorage);
+    $this->extensionStorages = new FeaturesExtensionStoragesByDirectory($this->configStorage, $extension_path_resolver);
     $this->extensionStorages->addStorage(InstallStorage::CONFIG_INSTALL_DIRECTORY);
     $this->extensionStorages->addStorage(InstallStorage::CONFIG_OPTIONAL_DIRECTORY);
     $this->packages = [];
