@@ -2,12 +2,14 @@
 
 namespace Drupal\Tests\features\Kernel;
 
+use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\features\Entity\FeaturesBundle;
 use Drupal\features\FeaturesBundleInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Archiver\ArchiveTar;
 use org\bovigo\vfs\vfsStream;
+use Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag;
 
 /**
  * @group features
@@ -131,8 +133,20 @@ class FeaturesGenerateTest extends KernelTestBase {
   public function testExportWrite() {
     // Set a fake drupal root, so the testbot can also write into it.
     vfsStream::setup('drupal');
-    \Drupal::getContainer()->setParameter('app.root', 'vfs://drupal');
     $this->featuresManager->setRoot('vfs://drupal');
+
+    // We need to change the app.root in order to generate packages into
+    // the virtual file system. Unfortunately, here we can't just use
+    // $this->container->setParameter(), because by this time the parameter bag
+    // is frozen. Also, we can't use ::register() method for this as it is
+    // expected by Kernel tests, because this value gets overridden during
+    // setUp() method. So we have to recreate the container instance with
+    // the same values but the new app.root value.
+    $container = new ContainerBuilder(new FrozenParameterBag([
+        'app.root' => 'vfs://drupal',
+      ] + $this->container->getParameterBag()->all()));
+    $container->setDefinitions($this->container->getDefinitions());
+    \Drupal::setContainer($container);
 
     $package = $this->featuresManager->getPackage(self::PACKAGE_NAME);
     // Find out where package will be exported.
