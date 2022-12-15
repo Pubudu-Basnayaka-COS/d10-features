@@ -725,7 +725,8 @@ class FeaturesCommands extends DrushCommands {
     // Parse list of arguments.
     $modules = [];
     foreach ($features as $featureString) {
-      list($module, $component) = explode(':', $featureString);
+      // Make sure there will actually be a component before exploding.
+      list($module, $component) = explode(':', "$featureString:");
 
       // We cannot use just a component name without its module.
       if (empty($module)) {
